@@ -22,6 +22,7 @@ import com.cliniterra.util.ValidationUtil;
 
 /**
  * @author Aayush Shrestha
+ * @author Aayusha Kandel
  */
 /**
  * Servlet implementation class RegisterController

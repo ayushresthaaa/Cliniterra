@@ -1,44 +1,50 @@
 package com.cliniterra.controller;
-
-/**
+/*
+ * @author Aayusha Kandel
  * @author Aayush Shrestha
- */
+ * */
+import com.cliniterra.model.ViewAppointmentModel;
+import com.cliniterra.service.ViewAppointmentService;
+import com.cliniterra.util.SessionUtil;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
-/**
- * Servlet implementation class ViewAppointmentController
- */
+import java.io.IOException;
+import java.util.List;
+
 @WebServlet(asyncSupported = true, urlPatterns = { "/view" })
 public class ViewAppointmentController extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
+    private static final long serialVersionUID = 1L;
+    private ViewAppointmentService appointmentService;
+
     public ViewAppointmentController() {
         super();
-        // TODO Auto-generated constructor stub
+        appointmentService = new ViewAppointmentService();
     }
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		request.getRequestDispatcher("WEB-INF/pages/viewappointment.jsp").forward(request, response);
-	}
+    protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+        String username = (String) SessionUtil.getAt(req, "username");
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
-	}
+        if (username == null) {
+            res.sendRedirect(req.getContextPath() + "/login");
+            return;
+        }
 
+        List<ViewAppointmentModel> appointments = appointmentService.getAppointmentsByUsername(username);
+
+        if (appointments != null) {
+            req.setAttribute("appointments", appointments);
+        } else {
+            req.setAttribute("error", "Error fetching appointments.");
+        }
+        req.getRequestDispatcher("WEB-INF/pages/viewappointment.jsp").forward(req, res);
+    }
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        doGet(request, response);
+    }
 }

@@ -1,100 +1,65 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<!--@author Aashika Kambang-->
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<!--@author Ashika Kambang
+@Aayush Shrestha-->
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Dr.SAMARA FORD - Profile</title>
+    <title>Dr. ${doctor.docFirstName} ${doctor.docLastName} - Profile</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/viewdoctor.css">
-    
-  </head>
-  <body>
-
+</head>
+<body>
     <!--Navbar-->
-   <div class="navbar"> 
-    <img class="logo" src="${pageContext.request.contextPath}/resources/images/clinilogobgrem.png" alt="Logo">
-    <div class="nav-links">
-      <a href="${pageContext.request.contextPath}/home">Home</a>
-      <a href="${pageContext.request.contextPath}/finddoctor">Find doctor</a>
-      <a href="${pageContext.request.contextPath}/view">View appointment</a>
-      <a href="${pageContext.request.contextPath}/aboutus">About us</a>
-      <a href="${pageContext.request.contextPath}/contact">Contact</a>
-    
-      <!--<a href="#" class="button">Book now</a>-->
-     </div>
-		<a href="${pageContext.request.contextPath}/book" class="button">Book now</a>
-  </div>
-
-    <!--Main-->
-    <div class="profile-container">
-      <div class="profile-header">
-        <img src="${pageContext.request.contextPath}/resources/images/samara.jpg" alt="Dr. Arati Thapa" class="profile-image" />
-        <div class="doctor-info">
-          <h1>DR. SAMARA FORD</h1>
-          <h2>Consultant Gynologist</h2>
+    <div class="navbar"> 
+        <img class="logo" src="${pageContext.request.contextPath}/resources/images/clinilogobgrem.png" alt="Logo">
+        <div class="nav-links">
+            <a href="${pageContext.request.contextPath}/home">Home</a>
+            <a href="${pageContext.request.contextPath}/finddoctor">Find doctor</a>
+            <a href="${pageContext.request.contextPath}/view">View appointment</a>
+            <a href="${pageContext.request.contextPath}/aboutus">About us</a>
+            <a href="${pageContext.request.contextPath}/contact">Contact</a>
         </div>
-      </div>
-
-      <div class="profile-content">
-        <div class="sidebar">
-          <h3>OPD SCHEDULE</h3>
-          <div class="opd-schedule">
-            <p>Sunday - Friday</p>
-            <p>09:00 AM - 10:30 AM</p>
-            <p>06:00 PM - 07:00 PM</p>
-          </div>
-
-          <a href="book.html" class="appointment-btn">Book An Appointment</a>
-          <div class="rating">
-          <div class="star-rating">
-            <span class="star filled">★</span>
-            <span class="star filled">★</span>
-            <span class="star filled">★</span>
-            <span class="star">★</span>
-            <span class="star">★</span>
-          </div>
-          <span class="rating-text">2/5</span>
-          </div>
-        </div>
-
-        <div class="main-content">
-          <h3>PROFESSIONAL JOURNEY</h3>
-
-          <h4>WORK EXPERIENCE</h4>
-          <ul>
-            <li>
-              2023-2024 : International Fellowship, Essex Partnership University
-              NHS Foundation Trust, United Kingdom
-            </li>
-            <li>
-              2017-2022: Assistant Professor, College of Medical Sciences and
-              Teaching Hospital, Chitwan
-            </li>
-            <li>
-              2012-2013: Medical Officer, Western Regional Hospital, Pokhara.
-            </li>
-          </ul>
-
-          <h4>EDUCATION</h4>
-          <ul>
-            <li>
-              2014-2017 – Resident Doctor, Department of Psychiatry, B.P Koirala
-              Institute of Health and Sciences, Dharan (3 years)
-            </li>
-            <li>
-              2007-2011 – Undergraduate medical course, Bachelor in Medicine and
-              Bachelor in Surgery (MBBS), Nepal Medical College and Teaching
-              Hospital, Kathmandu (4 and half years)
-            </li>
-            <li>
-              2011-2012 – 1 year of compulsory rotatory internship, Nepal
-              Medical College and Teaching Hospital
-            </li>
-          </ul>
-        </div>
-      </div>
+        <a href="${pageContext.request.contextPath}/book?doc_id=${doctor.docId}" class="button">Book now</a>
     </div>
-  </body>
+
+    <!--Doctor Profile Info-->
+    <div class="profile-container" style="margin-top: 80px;">
+        <div class="profile-header">
+            <div class="doctor-info">
+                <h1>DR. ${doctor.docFirstName} ${doctor.docLastName}</h1>
+                <h2>${doctor.docSpeciality}</h2>
+                <p><b>Email:</b> ${doctor.docEmail}</p>
+                <p><b>Phone:</b> ${doctor.docPhone}</p>
+                <p><b>Gender:</b> ${doctor.docGender}</p>
+                <p><b>DOB:</b> ${doctor.docDob}</p>
+                <p><b>Address:</b> ${doctor.docAddress}</p>
+            </div>
+        </div>
+
+        <div class="profile-content">
+            <div class="sidebar">
+                <h3>OPD SCHEDULE</h3>
+                <div class="opd-schedule">
+                    <c:choose>
+                        <c:when test="${not empty scheduleList}">
+                            <c:forEach var="sch" items="${scheduleList}">
+                                <p>
+                                    <b>${sch.schedule_day}</b>: 
+                                    ${sch.start_time} - ${sch.end_time}
+                                </p>
+                            </c:forEach>
+                        </c:when>
+                        <c:otherwise>
+                            <p>Schedule not available</p>
+                        </c:otherwise>
+                    </c:choose>
+                </div>
+            </div>
+            <div class="main-content"></div>
+        </div>
+    </div>
+</body>
 </html>
